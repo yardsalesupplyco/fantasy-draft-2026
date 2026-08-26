@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Rumble Fantasy Draft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+            color: #F9FAFB;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .font-bebas {
+            font-family: 'Bebas Neue', cursive;
+        }
+
+        /* The wrestling ring container */
+        #ring {
+            position: relative;
+            width: 100%;
+            max-width: 1400px; /* Wider */
+            height: 650px; /* Taller */
+            background-color: #4B5563; /* Fallback color */
+            background-size: cover;
+            border: 10px solid #FBBF24;
+            border-radius: 1rem;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+            overflow: hidden;
+            margin: auto;
+        }
+        
+        /* Video background styling */
+        .video-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            z-index: 1; /* Ensure video is on top of the ring's background */
+        }
+
+        /* Individual fighter styling */
+        .fighter {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            will-change: transform, width, height; /* Performance optimization for animation */
+            transition: width 0.5s ease-in-out, height 0.5s ease-in-out; /* Smooth growth transition */
+            z-index: 10; /* Ensure fighters are on top of the video */
+            top: 0;
+            left: 0;
+        }
+
+        .fighter-image {
+            width: 95%; /* Use percentage to scale with parent */
+            height: auto;
+            object-fit: cover;
+            background-color: transparent;
+        }
+        
+        /* Visual effect for when fighters collide */
+        .hit {
+            filter: brightness(2.5);
+            transition: filter 0.05s;
+        }
+
+        .fighter-name {
+            background-color: rgba(17, 24, 39, 0.8);
+            color: #F9FAFB;
+            padding: 2px 8px;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+            white-space: nowrap;
+        }
+
+        /* Draft pick ticker styling */
+        #ticker {
+            background-color: #1F2937;
+            border-top: 4px solid #FBBF24;
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-shrink: 0; /* Prevent ticker from shrinking */
+        }
+        
+        .pick-card {
+            display: inline-block;
+            background-color: #374151;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 0.5rem;
+            min-width: 200px;
+            text-align: center;
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        .hidden {
+            display: none !important; /* Use !important to ensure it's always hidden */
+        }
+        
+        /* Winner Display Styling */
+        #winner-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the container */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            animation: fadeIn 1.5s ease-in;
+        }
+        
+        #winner-display .fighter {
+            position: relative; /* Let it be a normal flex item */
+            transform: scale(1.2) translateY(30px); /* Nudge down for better alignment */
+        }
+        
+        #winner-text-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #winner-text {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3rem;
+            line-height: 1.1;
+            max-width: 400px;
+            margin-left: 1.5rem;
+        }
+
+        /* Keyframe animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="text-center p-2">
+        <h1 class="font-bebas text-5xl md:text-6xl text-amber-400 tracking-wider">Royal Rumble Draft</h1>
+        <p class="text-gray-400 text-sm">The Ultimate Test of Fantasy Football Destiny</p>
+    </header>
+
+    <!-- Main Game Area -->
+    <main class="flex-grow flex flex-col items-center justify-center p-2">
+        <div id="ring">
+             <video id="bg-video" class="video-bg" loop muted playsinline src="ring.mp4"></video>
+             <video id="intro-video" class="video-bg hidden" playsinline src="draft-intro-video.mp4"></video>
+             <div id="winner-display" class="hidden">
+                <!-- Content is generated dynamically in JS -->
+             </div>
+        </div>
+
+        <div id="controls" class="text-center">
+            <div id="status" class="text-5xl font-semibold text-white h-12 mb-2"></div>
+            <button id="startButton" class="font-bebas bg-amber-400 text-gray-900 text-3xl px-10 py-3 rounded-lg shadow-lg hover:bg-amber-500 transition-all transform hover:scale-105">
+                Start The Rumble!
+            </button>
+            <button id="restartButton" class="font-bebas bg-green-500 text-gray-900 text-3xl px-10 py-3 rounded-lg shadow-lg hover:bg-green-600 transition-all transform hover:scale-105 hidden">
+                Restart
+            </button>
+        </div>
+    </main>
+
+    <!-- Draft Picks Ticker -->
+    <footer id="ticker-container" class="w-full">
+        <h2 class="font-bebas text-2xl text-center mb-1 text-amber-400">Draft Board</h2>
+        <div id="ticker" class="w-full p-2"></div>
+    </footer>
+    
+    <!-- Audio Elements -->
+    <audio id="background-music" loop src="whoop-yo-ass-boy.mp3"></audio>
+    <audio id="entry-sound" src="crowd-ovation.mp3"></audio>
+    <audio id="elimination-sound"src="gong-hit.mp3"></audio>
+    <audio id="winner-sound" src="trophy-sound.mp3"></audio>
+    <audio id="winner-announcement-sound" src="WinnerIs.mp3"></audio>
+
+    <script>
+        // --- CONFIGURATION ---
+        const FANTASY_TEAMS = [
+            { id: 1, wrestler: "Brianna's Sweaterdress", image: "player1.png", eliminationSound: "BSgone.mp3" },
+            { id: 2, wrestler: "Stucknut", image: "player2.png", eliminationSound: "SNgone.mp3" },
+            { id: 3, wrestler: "LaMario Kart", image: "player3.png", eliminationSound: "LCout.mp3" },
+            { id: 4, wrestler: "SparkleBrite Static", image: "player4.png", eliminationSound: "SBSout.mp3" },
+            { id: 5, wrestler: "Joelslaw", image: "player5.png", eliminationSound: "JSseeya.mp3" },
+            { id: 6, wrestler: "Brianna's Johnson", image: "player6.png", eliminationSound: "BJseeya.mp3" },
+            { id: 7, wrestler: "Warden Ward", image: "player7.png", eliminationSound: "WWbuhbye.mp3" },
+            { id: 8, wrestler: "Chattahoochee Coochie", image: "player8.png", eliminationSound: "CCbuhbye.mp3" },
+            { id: 9, wrestler: "Randy's Virgins", image: "player9.png", eliminationSound: "RVnicetry.mp3" },
+            { id: 10, wrestler: "Tuna Can Dan", image: "player10.png", eliminationSound: "TCDsolongsucka.mp3" },
+            { id: 11, wrestler: "Fairdealing's Finest", image: "player11.png", eliminationSound: "FFsolongsucka.mp3" },
+            { id: 12, wrestler: "Crisco Cops", image: "player12.png", eliminationSound: "CCnicetry.mp3" },
+        ];
+        const TOTAL_TEAMS = FANTASY_TEAMS.length;
+        const ENTRY_INTERVAL_MS = 5000;
+        const ELIMINATION_INTERVAL_MS = 4000;
+        const BASE_FIGHTER_WIDTH = 180;
+        const BASE_FIGHTER_HEIGHT = 220;
+        const BASE_BATTLE_DISTANCE = 220;
+
+        // --- DOM ELEMENTS ---
+        const startButton = document.getElementById('startButton');
+        const restartButton = document.getElementById('restartButton');
+        const ring = document.getElementById('ring');
+        const ticker = document.getElementById('ticker');
+        const statusEl = document.getElementById('status');
+        const backgroundMusic = document.getElementById('background-music');
+        const entrySound = document.getElementById('entry-sound');
+        const eliminationSound = document.getElementById('elimination-sound');
+        const winnerSound = document.getElementById('winner-sound');
+        const winnerAnnouncementSound = document.getElementById('winner-announcement-sound');
+        const video = document.getElementById('bg-video');
+        const introVideo = document.getElementById('intro-video');
+        const winnerDisplay = document.getElementById('winner-display');
+
+        // --- SET AUDIO VOLUMES ---
+        backgroundMusic.volume = 0.3;
+        entrySound.volume = 0.7;
+        eliminationSound.volume = 0.8;
+        winnerSound.volume = 0.8;
+        winnerAnnouncementSound.volume = 1.0;
+
+        // --- GAME STATE ---
+        let entrants = [];
+        let inRing = [];
+        let eliminated = [];
+        let entryInterval;
+        let eliminationInterval;
+        let animationFrameId;
+        let currentFighterSize = { width: BASE_FIGHTER_WIDTH, height: BASE_FIGHTER_HEIGHT, battleDistance: BASE_BATTLE_DISTANCE };
+
+        // --- UTILITY FUNCTIONS ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function playSound(sound) {
+            sound.currentTime = 0;
+            sound.play().catch(error => console.log(`Audio playback failed: ${error.message}`));
+        }
+
+        // --- CORE GAME LOGIC ---
+        function resetGame() {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+            clearInterval(entryInterval);
+            clearInterval(eliminationInterval);
+            eliminationInterval = null;
+            
+            ring.querySelectorAll('.fighter').forEach(el => el.remove());
+            winnerDisplay.innerHTML = '';
+            
+            ticker.innerHTML = '';
+            statusEl.textContent = '';
+            entrants = [...FANTASY_TEAMS];
+            shuffleArray(entrants);
+            inRing = [];
+            eliminated = [];
+            
+            startButton.classList.remove('hidden');
+            restartButton.classList.add('hidden');
+            winnerDisplay.classList.add('hidden');
+            
+            backgroundMusic.pause();
+            backgroundMusic.currentTime = 0;
+            
+            updateFighterSizes();
+        }
+
+        function startGame() {
+            resetGame();
+            startButton.classList.add('hidden');
+            restartButton.classList.add('hidden');
+            
+            video.classList.add('hidden');
+            introVideo.classList.remove('hidden');
+            
+            const playPromise = introVideo.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.error("Intro video failed to play, starting rumble immediately.", error);
+                    beginRumble();
+                });
+            }
+        }
+
+        function beginRumble() {
+            introVideo.classList.add('hidden');
+            video.classList.remove('hidden');
+            video.play().catch(e => console.error("Looping background video failed to play.", e));
+
+            playSound(backgroundMusic);
+            statusEl.textContent = 'The first entrant is on their way!';
+            entryInterval = setInterval(nextEntrant, ENTRY_INTERVAL_MS);
+        }
+
+        function nextEntrant() {
+            if (entrants.length === 0) {
+                clearInterval(entryInterval);
+                if (!eliminationInterval) {
+                    eliminationInterval = setInterval(eliminateFighter, ELIMINATION_INTERVAL_MS);
+                }
+                return;
+            }
+
+            const fighterData = entrants.shift();
+            
+            if (inRing.length === 0) {
+                playSound(entrySound);
+            }
+            
+            statusEl.textContent = `${fighterData.wrestler} has entered the ring!`;
+
+            const fighterEl = document.createElement('div');
+            fighterEl.id = `fighter-${fighterData.id}`;
+            fighterEl.className = 'fighter';
+            fighterEl.style.width = `${currentFighterSize.width}px`;
+            fighterEl.style.height = `${currentFighterSize.height}px`;
+            fighterEl.innerHTML = `
+                <img src="${fighterData.image}" alt="${fighterData.wrestler}" class="fighter-image" onerror="this.onerror=null;this.src='https://placehold.co/170x170?text=IMG';">
+                <span class="fighter-name">${fighterData.wrestler}</span>
+            `;
+            ring.appendChild(fighterEl);
+
+            const ringRect = ring.getBoundingClientRect();
+            const newFighter = {
+                data: fighterData,
+                el: fighterEl,
+                x: Math.random() * (ringRect.width - currentFighterSize.width),
+                y: Math.random() * (ringRect.height - currentFighterSize.height),
+                vx: 0,
+                vy: 0,
+                state: 'seeking',
+                target: null,
+                punchCharge: 0,
+                isAttacking: false,
+                comboCount: 0,
+            };
+            inRing.push(newFighter);
+
+            if (inRing.length === 6 && !eliminationInterval) {
+                eliminationInterval = setInterval(eliminateFighter, ELIMINATION_INTERVAL_MS);
+            }
+
+            if (!animationFrameId) {
+                animateRing();
+            }
+        }
+        
+        function updateFighterSizes() {
+            let sizeScaleFactor = 1;
+            let battleDistanceScaleFactor = 1;
+
+            if (eliminated.length >= 8) {
+                const numEliminatedAfterThreshold = eliminated.length - 7;
+                sizeScaleFactor = 1 + numEliminatedAfterThreshold * 0.2;
+                battleDistanceScaleFactor = 1 / (1 + numEliminatedAfterThreshold * 0.05);
+            }
+            
+            currentFighterSize.width = BASE_FIGHTER_WIDTH * sizeScaleFactor;
+            currentFighterSize.height = BASE_FIGHTER_HEIGHT * sizeScaleFactor;
+            currentFighterSize.battleDistance = BASE_BATTLE_DISTANCE * battleDistanceScaleFactor;
+
+            inRing.forEach(fighter => {
+                fighter.el.style.width = `${currentFighterSize.width}px`;
+                fighter.el.style.height = `${currentFighterSize.height}px`;
+            });
+        }
+
+        function eliminateFighter() {
+            if (inRing.length <= 1) {
+                if (inRing.length === 1 && entrants.length === 0) {
+                    endGame();
+                }
+                return;
+            }
+            
+            const fightingFighters = inRing.filter(f => f.state === 'fighting');
+            
+            if (fightingFighters.length < 2) return;
+
+            const battleIndex = Math.floor(Math.random() * (fightingFighters.length / 2));
+            const fighter1 = fightingFighters[battleIndex * 2];
+            const fighter2 = fighter1.target;
+
+            if (!fighter2) return;
+
+            const loser = Math.random() < 0.5 ? fighter1 : fighter2;
+            const winner = loser === fighter1 ? fighter2 : fighter1;
+            
+            const eliminationIndex = inRing.findIndex(f => f.data.id === loser.data.id);
+            if (eliminationIndex === -1) return;
+            
+            const [eliminatedFighterObj] = inRing.splice(eliminationIndex, 1);
+            eliminated.push(eliminatedFighterObj.data);
+            
+            playSound(eliminationSound);
+            
+            setTimeout(() => {
+                if (eliminatedFighterObj.data.eliminationSound) {
+                    const customSound = new Audio(eliminatedFighterObj.data.eliminationSound);
+                    customSound.volume = 0.9;
+                    playSound(customSound);
+                }
+            }, 750);
+            
+            statusEl.textContent = `${eliminatedFighterObj.data.wrestler} has been eliminated!`;
+
+            const fighterEl = eliminatedFighterObj.el;
+            if (fighterEl) {
+                fighterEl.style.transition = 'transform 0.8s ease-out, opacity 0.8s ease-out';
+                fighterEl.style.transform = `translate(${eliminatedFighterObj.x}px, ${eliminatedFighterObj.y}px) scale(0)`;
+                fighterEl.style.opacity = '0';
+                setTimeout(() => fighterEl.remove(), 800);
+            }
+            
+            if (winner) {
+                winner.state = 'seeking';
+                winner.target = null;
+            }
+            
+            updateFighterSizes();
+            assignDraftPick(eliminatedFighterObj.data);
+        }
+
+        function assignDraftPick(fighterData) {
+            const pickNumber = TOTAL_TEAMS - eliminated.length + 1;
+            const pickCard = document.createElement('div');
+            pickCard.className = 'pick-card';
+            pickCard.innerHTML = `
+                <div class="font-bebas text-3xl text-amber-400">PICK ${pickNumber}</div>
+                <div class="font-bold text-lg">${fighterData.wrestler}</div>
+            `;
+            ticker.prepend(pickCard);
+        }
+
+        function endGame() {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+            clearInterval(entryInterval);
+            clearInterval(eliminationInterval);
+            
+            const winnerObj = inRing[0];
+            const winner = winnerObj.data;
+            
+            winnerObj.el.remove();
+            
+            playSound(winnerSound);
+            playSound(entrySound);
+            
+            setTimeout(() => {
+                playSound(winnerAnnouncementSound);
+            }, 500);
+
+            statusEl.textContent = ``;
+            
+            const pickCard = document.createElement('div');
+            pickCard.className = 'pick-card border-2 border-amber-400 shadow-lg';
+            pickCard.innerHTML = `
+                <div class="font-bebas text-4xl text-amber-400">PICK 1</div>
+                <div class="font-bold text-xl">${winner.wrestler}</div>
+            `;
+            ticker.prepend(pickCard);
+            
+            setTimeout(() => {
+                winnerDisplay.innerHTML = `
+                    <div class="fighter" style="width: ${currentFighterSize.width}px; height: ${currentFighterSize.height}px;">
+                        <img src="${winner.image}" alt="Winner" class="fighter-image">
+                        <span class="fighter-name">${winner.wrestler}</span>
+                    </div>
+                    <div id="winner-text-container">
+                        <img src="trophy.svg" alt="Trophy" width="200px" height="200px">
+                        <div id="winner-text">The winner is ${winner.wrestler}! <br> They get the #1 pick!</div>
+                    </div>
+                `;
+                winnerDisplay.classList.remove('hidden');
+                restartButton.classList.remove('hidden');
+            }, 2000);
+            
+            backgroundMusic.pause();
+        }
+
+        // --- ANIMATION LOGIC ---
+        function animateRing() {
+            const ringRect = ring.getBoundingClientRect();
+
+            // Universal repulsion force
+            for (let i = 0; i < inRing.length; i++) {
+                for (let j = i + 1; j < inRing.length; j++) {
+                    const f1 = inRing[i];
+                    const f2 = inRing[j];
+                    const dx = f2.x - f1.x;
+                    const dy = f2.y - f1.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const personalSpace = currentFighterSize.width * 0.8;
+
+                    if (distance < personalSpace) {
+                        const overlap = personalSpace - distance;
+                        const force = overlap * 0.1;
+                        const angle = Math.atan2(dy, dx);
+                        
+                        f1.vx -= Math.cos(angle) * force;
+                        f1.vy -= Math.sin(angle) * force;
+                        f2.vx += Math.cos(angle) * force;
+                        f2.vy += Math.sin(angle) * force;
+                    }
+                }
+            }
+
+            inRing.forEach(fighter => {
+                if (fighter.state === 'seeking') {
+                    let closestOpponent = null;
+                    let minDistance = Infinity;
+
+                    inRing.forEach(opponent => {
+                        if (fighter === opponent || opponent.state === 'fighting') return;
+                        
+                        let dx = opponent.x - fighter.x;
+                        let dy = opponent.y - fighter.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestOpponent = opponent;
+                        }
+                    });
+
+                    fighter.target = closestOpponent;
+
+                    if (fighter.target) {
+                        if (minDistance < currentFighterSize.battleDistance) {
+                            fighter.state = 'fighting';
+                            fighter.target.state = 'fighting';
+                            fighter.target.target = fighter;
+                            fighter.vx = 0;
+                            fighter.vy = 0;
+                            
+                            if (Math.random() < 0.5) {
+                                fighter.isAttacking = true;
+                                fighter.comboCount = Math.floor(Math.random() * 3) + 2;
+                                fighter.target.isAttacking = false;
+                            } else {
+                                fighter.isAttacking = false;
+                                fighter.target.isAttacking = true;
+                                fighter.target.comboCount = Math.floor(Math.random() * 3) + 2;
+                            }
+                        } else {
+                            const angle = Math.atan2(fighter.target.y - fighter.y, fighter.target.x - fighter.x);
+                            const speed = 12 + Math.random() * 8;
+                            fighter.vx = Math.cos(angle) * speed;
+                            fighter.vy = Math.sin(angle) * speed;
+                        }
+                    } else {
+                        fighter.vx += (Math.random() - 0.5) * 0.5;
+                        fighter.vy += (Math.random() - 0.5) * 0.5;
+                    }
+                }
+
+                fighter.x += fighter.vx;
+                fighter.y += fighter.vy;
+
+                fighter.vx *= 0.9;
+                fighter.vy *= 0.9;
+
+                if (fighter.x <= 0) { fighter.x = 0; fighter.vx *= -1; }
+                if (fighter.x >= ringRect.width - currentFighterSize.width) { fighter.x = ringRect.width - currentFighterSize.width; fighter.vx *= -1; }
+                if (fighter.y <= 0) { fighter.y = 0; fighter.vy *= -1; }
+                if (fighter.y >= ringRect.height - currentFighterSize.height) { fighter.y = ringRect.height - currentFighterSize.height; fighter.vy *= -1; }
+
+                let displayX = fighter.x;
+                let displayY = fighter.y;
+
+                if (fighter.state === 'fighting' && fighter.target) {
+                    if (fighter.isAttacking) {
+                        fighter.punchCharge += 0.4;
+                        const punchDistance = Math.abs(Math.sin(fighter.punchCharge)) * 25;
+                        const angleToTarget = Math.atan2(fighter.target.y - fighter.y, fighter.target.x - fighter.x);
+                        
+                        displayX += Math.cos(angleToTarget) * punchDistance;
+                        displayY += Math.sin(angleToTarget) * punchDistance;
+
+                        if (Math.sin(fighter.punchCharge) < 0) {
+                            fighter.comboCount--;
+                            if (fighter.comboCount <= 0) {
+                                fighter.isAttacking = false;
+                                fighter.target.isAttacking = true;
+                                fighter.target.comboCount = Math.floor(Math.random() * 3) + 2;
+                            }
+                        }
+                    } else { 
+                        const target = fighter.target;
+                        if (target && target.isAttacking) {
+                            if (Math.abs(Math.sin(target.punchCharge)) > 0.9 && !fighter.el.classList.contains('hit')) {
+                                fighter.el.classList.add('hit');
+                                setTimeout(() => {
+                                    if (fighter.el) fighter.el.classList.remove('hit');
+                                }, 150);
+                            }
+                        }
+                    }
+                }
+                
+                fighter.el.style.transform = `translate(${displayX}px, ${displayY}px)`;
+            });
+
+            animationFrameId = requestAnimationFrame(animateRing);
+        }
+
+        // --- EVENT LISTENERS ---
+        startButton.addEventListener('click', startGame);
+        restartButton.addEventListener('click', startGame);
+        introVideo.addEventListener('ended', beginRumble);
+
+        video.addEventListener('loadeddata', () => {
+            console.log("Video data has been loaded. It should be ready to play.");
+        }, false);
+
+        // Initialize on page load
+        resetGame();
+    </script>
+</body>
+</html>
