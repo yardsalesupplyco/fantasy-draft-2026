@@ -215,16 +215,15 @@
             new Audio("punch5.mp3")
         ];
 
-        function preloadImages() {
-            new Image().src = testFiles.idle;
-            new Image().src = testFiles.punchLeft;
-            new Image().src = testFiles.punchRight;
-            new Image().src = testFiles.kick;
-            new Image().src = testFiles.hurt;
-            new Image().src = testFiles.ko;
-        }
-        preloadImages();
-
+       const testFiles = {
+            idle: "idle.gif",
+            punchLeft: "left-punch.gif",
+            punchRight: "right-punch.gif",
+            kick: "kick.gif",
+            hurt: "hurt.gif",
+            ko: "dead.gif"
+        };
+        
         const startBtn = document.getElementById('startButton');
         const bgMusic = document.getElementById('bg-music');
         const koSound = document.getElementById('ko-sound');
