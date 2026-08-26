@@ -132,9 +132,10 @@
         }
 
         #fighter-1 { left: 15%; }
-        #fighter-2 { right: 15%; transform: scaleX(-1); } /* P2 faces left */
-        /* To keep P2 text facing right, we flip it back inside */
-        #fighter-2 .fighter-name-tag { transform: scaleX(-1); }
+        #fighter-2 { right: 15%; } 
+        
+        /* Flip JUST the image for Player 2, so the text stays normal */
+        #fighter-2 .fighter-image { transform: scaleX(-1); } 
 
         .fighter-image {
             width: 100%;
@@ -144,6 +145,7 @@
         }
 
         .fighter-name-tag {
+            display: inline-block;
             background-color: rgba(0, 0, 0, 0.7);
             color: #fff;
             padding: 4px 12px;
@@ -234,7 +236,6 @@
         </div>
 
         <div id="stage">
-             <video id="intro-video" class="video-bg hidden" playsinline src="draft-intro-video.mp4"></video>
              <video id="bg-video" class="video-bg" loop muted playsinline src="ring.mp4"></video>
              
              <!-- Heads Up Display (Hidden until fight starts) -->
@@ -274,13 +275,12 @@
     
     <!-- Audio Elements -->
     <audio id="bg-music" loop src="whoop-yo-ass-boy.mp3"></audio>
-    <audio id="hit-sound" src="gong-hit.mp3"></audio> <!-- Using gong as a heavy hit for now -->
+    <audio id="hit-sound" src="gong-hit.mp3"></audio> 
     <audio id="ko-sound" src="crowd-ovation.mp3"></audio>
     <audio id="winner-announcement" src="WinnerIs.mp3"></audio>
 
     <script>
         // --- DATA ---
-        // Once you upload files to HubSpot, replace these filenames with the HubSpot URLs
         const TEAMS = [
             { id: 1, name: "Brianna's Sweaterdress", image: "player1.png", eliminationSound: "BSgone.mp3" },
             { id: 2, name: "Stucknut", image: "player2.png", eliminationSound: "SNgone.mp3" },
@@ -298,7 +298,6 @@
 
         // --- DOM Elements ---
         const startBtn = document.getElementById('startButton');
-        const introVideo = document.getElementById('intro-video');
         const bgVideo = document.getElementById('bg-video');
         const bgMusic = document.getElementById('bg-music');
         const hitSound = document.getElementById('hit-sound');
@@ -344,23 +343,12 @@
         // --- Game Flow ---
         startBtn.addEventListener('click', () => {
             startBtn.parentElement.classList.add('hidden');
-            
-            bgVideo.classList.add('hidden');
-            introVideo.classList.remove('hidden');
-            
-            introVideo.play().then(() => {
-                introVideo.onended = initTournament;
-            }).catch(() => {
-                // Autoplay blocked or missing file
-                initTournament();
-            });
+            initTournament();
         });
 
         function initTournament() {
-            introVideo.classList.add('hidden');
-            bgVideo.classList.remove('hidden');
-            bgVideo.play();
-            bgMusic.play();
+            bgVideo.play().catch(e=>{});
+            bgMusic.play().catch(e=>{});
             generateBracket();
             nextMatch();
         }
