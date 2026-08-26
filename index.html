@@ -181,17 +181,16 @@
     <audio id="trophy-sound" src="trophy-sound.mp3"></audio>
 
     <script>
-        // Updated test files to include the left and right punch!
+        // Filenames formatted without spaces for web compatibility
         const testFiles = {
-            idle: "standing.gif", // Left this as standing.gif until you get a new idle!
-            punchLeft: "left punch.gif",
-            punchRight: "right punch.gif",
+            idle: "idle.gif",
+            punchLeft: "left-punch.gif",
+            punchRight: "right-punch.gif",
             kick: "kick.gif",
             hurt: "hurt.gif",
             ko: "dead.gif"
         };
 
-        // All 12 teams updated to use the new animation layout
         const TEAMS = [
             { id: 1, name: "Brianna's Sweaterdress", eliminationSound: "BSgone.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
             { id: 2, name: "Stucknut", eliminationSound: "SNgone.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
@@ -215,15 +214,16 @@
             new Audio("punch5.mp3")
         ];
 
-       const testFiles = {
-            idle: "idle.gif",
-            punchLeft: "left-punch.gif",
-            punchRight: "right-punch.gif",
-            kick: "kick.gif",
-            hurt: "hurt.gif",
-            ko: "dead.gif"
-        };
-        
+        function preloadImages() {
+            new Image().src = testFiles.idle;
+            new Image().src = testFiles.punchLeft;
+            new Image().src = testFiles.punchRight;
+            new Image().src = testFiles.kick;
+            new Image().src = testFiles.hurt;
+            new Image().src = testFiles.ko;
+        }
+        preloadImages();
+
         const startBtn = document.getElementById('startButton');
         const bgMusic = document.getElementById('bg-music');
         const koSound = document.getElementById('ko-sound');
@@ -370,7 +370,6 @@
             const attackClass = attackerNum === 1 ? 'anim-attack' : 'anim-attack-p2';
             const hitClass = attackerNum === 1 ? 'anim-hit-p2' : 'anim-hit'; 
 
-            // Roll to see which attack animation plays!
             const attackRoll = Math.random();
             if (attackRoll < 0.33) {
                 attackerImg.src = attackerData.imgPunchLeft;
