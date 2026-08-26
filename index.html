@@ -45,7 +45,7 @@
 
         .health-bar {
             height: 100%; width: 100%; background: linear-gradient(to bottom, #ff3333, #aa0000);
-            transition: width 0.15s ease-out; /* Sped up health drain to match fast combos */
+            transition: width 0.15s ease-out;
         }
         .p2-hud .health-bar { float: right; }
 
@@ -181,30 +181,32 @@
     <audio id="trophy-sound" src="trophy-sound.mp3"></audio>
 
     <script>
+        // Updated test files to include the left and right punch!
         const testFiles = {
-            idle: "standing.gif",
-            punch: "throwpunch.gif",
-            kick: "throwkick.gif",
-            hurt: "gettingpunched.gif",
-            ko: "gethittoground.gif"
+            idle: "standing.gif", // Left this as standing.gif until you get a new idle!
+            punchLeft: "left punch.gif",
+            punchRight: "right punch.gif",
+            kick: "kick.gif",
+            hurt: "hurt.gif",
+            ko: "dead.gif"
         };
 
+        // All 12 teams updated to use the new animation layout
         const TEAMS = [
-            { id: 1, name: "Brianna's Sweaterdress", eliminationSound: "BSgone.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 2, name: "Stucknut", eliminationSound: "SNgone.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 3, name: "LaMario Kart", eliminationSound: "LCout.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 4, name: "SparkleBrite Static", eliminationSound: "SBSout.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 5, name: "Joelslaw", eliminationSound: "JSseeya.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 6, name: "Brianna's Johnson", eliminationSound: "BJseeya.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 7, name: "Warden Ward", eliminationSound: "WWbuhbye.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 8, name: "Chattahoochee Coochie", eliminationSound: "CCbuhbye.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 9, name: "Randy's Virgins", eliminationSound: "RVnicetry.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 10, name: "Tuna Can Dan", eliminationSound: "TCDsolongsucka.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 11, name: "Fairdealing's Finest", eliminationSound: "FFsolongsucka.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 12, name: "Crisco Cops", eliminationSound: "CCnicetry.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 1, name: "Brianna's Sweaterdress", eliminationSound: "BSgone.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 2, name: "Stucknut", eliminationSound: "SNgone.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 3, name: "LaMario Kart", eliminationSound: "LCout.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 4, name: "SparkleBrite Static", eliminationSound: "SBSout.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 5, name: "Joelslaw", eliminationSound: "JSseeya.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 6, name: "Brianna's Johnson", eliminationSound: "BJseeya.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 7, name: "Warden Ward", eliminationSound: "WWbuhbye.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 8, name: "Chattahoochee Coochie", eliminationSound: "CCbuhbye.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 9, name: "Randy's Virgins", eliminationSound: "RVnicetry.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 10, name: "Tuna Can Dan", eliminationSound: "TCDsolongsucka.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 11, name: "Fairdealing's Finest", eliminationSound: "FFsolongsucka.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 12, name: "Crisco Cops", eliminationSound: "CCnicetry.mp3", imgIdle: testFiles.idle, imgPunchLeft: testFiles.punchLeft, imgPunchRight: testFiles.punchRight, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
         ];
 
-        // The 5 randomized punch sounds!
         const punchAudios = [
             new Audio("punch1.mp3"),
             new Audio("punch2.mp3"),
@@ -215,7 +217,8 @@
 
         function preloadImages() {
             new Image().src = testFiles.idle;
-            new Image().src = testFiles.punch;
+            new Image().src = testFiles.punchLeft;
+            new Image().src = testFiles.punchRight;
             new Image().src = testFiles.kick;
             new Image().src = testFiles.hurt;
             new Image().src = testFiles.ko;
@@ -314,24 +317,19 @@
             let p1Hp = 100; let p2Hp = 100;
             let currentAttacker = Math.random() > 0.5 ? 1 : 2;
             let comboCount = 0;
-            let targetCombo = Math.floor(Math.random() * 3) + 1; // Start with a 1 to 3 hit combo
+            let targetCombo = Math.floor(Math.random() * 3) + 1; 
 
-            // This recursive loop completely changes the fighting pacing
             function strikeLoop() {
-                if (p1Hp <= 0 || p2Hp <= 0) return; // Prevent extra hits if someone is dead
+                if (p1Hp <= 0 || p2Hp <= 0) return; 
 
-                // The Adrenaline Comeback Mechanic!
                 let defenderHp = currentAttacker === 1 ? p2Hp : p1Hp;
                 if (defenderHp > 0 && defenderHp <= 30 && Math.random() < 0.45) {
-                    currentAttacker = currentAttacker === 1 ? 2 : 1; // Intercept and steal momentum!
+                    currentAttacker = currentAttacker === 1 ? 2 : 1; 
                     comboCount = 0;
-                    targetCombo = Math.floor(Math.random() * 4) + 2; // Massive 2-5 hit comeback combo!
+                    targetCombo = Math.floor(Math.random() * 4) + 2; 
                 }
 
-                // Execute the damage
-                let damage = Math.floor(Math.random() * 9) + 8; // 8 to 16 damage per hit
-                
-                // Speed variations: First strike is slower. Combos are a fast barrage!
+                let damage = Math.floor(Math.random() * 9) + 8; 
                 let delayToNextStrike = comboCount > 0 ? (Math.floor(Math.random() * 200) + 400) : (Math.floor(Math.random() * 500) + 700);
 
                 if (currentAttacker === 1) {
@@ -344,22 +342,20 @@
 
                 comboCount++;
                 if (comboCount >= targetCombo) {
-                    // Turn is over, switch attackers
                     currentAttacker = currentAttacker === 1 ? 2 : 1;
                     comboCount = 0;
-                    targetCombo = Math.floor(Math.random() * 3) + 1; // 1-3 hits next time
+                    targetCombo = Math.floor(Math.random() * 3) + 1; 
                 }
 
                 if (p1Hp <= 0 || p2Hp <= 0) {
                     setTimeout(() => {
                         handleKnockout(p1Hp <= 0 ? p1Data : p2Data, p1Hp <= 0 ? p2Data : p1Data, p1Hp <= 0 ? 1 : 2);
-                    }, 400); // Give the final punch animation a split second to finish before the KO
+                    }, 400); 
                 } else {
                     setTimeout(strikeLoop, delayToNextStrike);
                 }
             }
             
-            // Kick off the match after a 1 second delay
             setTimeout(strikeLoop, 1000);
         }
 
@@ -375,12 +371,19 @@
             const attackClass = attackerNum === 1 ? 'anim-attack' : 'anim-attack-p2';
             const hitClass = attackerNum === 1 ? 'anim-hit-p2' : 'anim-hit'; 
 
-            const isPunch = Math.random() > 0.5;
-            attackerImg.src = isPunch ? attackerData.imgPunch : attackerData.imgKick;
+            // Roll to see which attack animation plays!
+            const attackRoll = Math.random();
+            if (attackRoll < 0.33) {
+                attackerImg.src = attackerData.imgPunchLeft;
+            } else if (attackRoll < 0.66) {
+                attackerImg.src = attackerData.imgPunchRight;
+            } else {
+                attackerImg.src = attackerData.imgKick;
+            }
+            
             attacker.classList.add(attackClass);
             
             setTimeout(() => {
-                // Play a random crunching hit sound!
                 let randomPunch = punchAudios[Math.floor(Math.random() * punchAudios.length)];
                 randomPunch.currentTime = 0;
                 randomPunch.volume = 0.9;
