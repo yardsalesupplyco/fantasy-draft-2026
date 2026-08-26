@@ -22,7 +22,8 @@
         .video-bg {
             position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
             width: auto; height: auto; object-fit: cover; transform: translate(-50%, -50%);
-            z-index: 1; opacity: 0.6; 
+            z-index: 1; opacity: 0.85; /* Slightly brighter for the pixel art! */
+            image-rendering: pixelated; /* Keeps the background crisp */
         }
 
         #hud {
@@ -75,7 +76,7 @@
             width: 100%; height: auto; max-height: 400px; object-fit: contain;
             filter: drop-shadow(0px 20px 10px rgba(0,0,0,0.6));
             transition: filter 0.1s, transform 0.1s;
-            image-rendering: pixelated; /* Keeps pixel art crisp! */
+            image-rendering: pixelated; 
         }
 
         .fighter-name-tag {
@@ -95,7 +96,6 @@
         }
         
         .anim-ko {
-            /* Now using the KO GIF, so we just fade them out instead of rotating */
             filter: grayscale(100%);
             animation: fadeOut 2.5s forwards;
         }
@@ -142,7 +142,8 @@
             </button>
         </div>
         <div id="stage">
-             <video id="bg-video" class="video-bg" loop muted playsinline src="ring.mp4"></video>
+             <!-- Swapped the video tag for an image tag with your new background! -->
+             <img id="bg-image" class="video-bg" src="background.gif" alt="Fighting Stage">
              
              <div id="hud" class="hidden">
                  <div class="player-hud p1-hud">
@@ -175,12 +176,14 @@
         <div id="ticker" class="w-full h-24 flex items-center"></div>
     </footer>
     
+    <!-- Audio Elements -->
     <audio id="bg-music" loop src="whoop-yo-ass-boy.mp3"></audio>
+    <audio id="strike-sound" src="soraatwod-punch-416719.mp3"></audio>
     <audio id="ko-sound" src="crowd-ovation.mp3"></audio>
     <audio id="winner-announcement" src="WinnerIs.mp3"></audio>
+    <audio id="trophy-sound" src="trophy-sound.mp3"></audio>
 
     <script>
-        // --- TEMPORARY TEST DATA USING YOUR 5 FILES ---
         const testFiles = {
             idle: "standing.gif",
             punch: "throwpunch.gif",
@@ -190,18 +193,18 @@
         };
 
         const TEAMS = [
-            { id: 1, name: "Brianna's Sweaterdress", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 2, name: "Stucknut", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 3, name: "LaMario Kart", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 4, name: "SparkleBrite Static", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 5, name: "Joelslaw", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 6, name: "Brianna's Johnson", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 7, name: "Warden Ward", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 8, name: "Chattahoochee Coochie", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 9, name: "Randy's Virgins", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 10, name: "Tuna Can Dan", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 11, name: "Fairdealing's Finest", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
-            { id: 12, name: "Crisco Cops", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 1, name: "Brianna's Sweaterdress", eliminationSound: "BSgone.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 2, name: "Stucknut", eliminationSound: "SNgone.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 3, name: "LaMario Kart", eliminationSound: "LCout.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 4, name: "SparkleBrite Static", eliminationSound: "SBSout.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 5, name: "Joelslaw", eliminationSound: "JSseeya.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 6, name: "Brianna's Johnson", eliminationSound: "BJseeya.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 7, name: "Warden Ward", eliminationSound: "WWbuhbye.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 8, name: "Chattahoochee Coochie", eliminationSound: "CCbuhbye.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 9, name: "Randy's Virgins", eliminationSound: "RVnicetry.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 10, name: "Tuna Can Dan", eliminationSound: "TCDsolongsucka.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 11, name: "Fairdealing's Finest", eliminationSound: "FFsolongsucka.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 12, name: "Crisco Cops", eliminationSound: "CCnicetry.mp3", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
         ];
 
         function preloadImages() {
@@ -214,8 +217,8 @@
         preloadImages();
 
         const startBtn = document.getElementById('startButton');
-        const bgVideo = document.getElementById('bg-video');
         const bgMusic = document.getElementById('bg-music');
+        const strikeSound = document.getElementById('strike-sound');
         const koSound = document.getElementById('ko-sound');
         const hud = document.getElementById('hud');
         const fightersContainer = document.getElementById('fighters-container');
@@ -229,38 +232,46 @@
         const p2HealthBar = document.getElementById('p2-health');
         const ticker = document.getElementById('ticker');
 
-        bgMusic.volume = 0.3; koSound.volume = 0.7;
+        bgMusic.volume = 0.3; koSound.volume = 0.7; strikeSound.volume = 0.9;
 
-        let bracketQueue = []; let nextRoundQueue = [];
+        let bracketQueue = []; let nextRoundQueue = []; let byes = [];
         let currentPickNumber = 12; let fightInterval; let currentMatch = null;
 
         function generateBracket() {
             let shuffled = [...TEAMS].sort(() => Math.random() - 0.5);
-            const byes = shuffled.slice(0, 4);
+            byes = shuffled.slice(0, 4);
             const r1Fighters = shuffled.slice(4, 12);
             bracketQueue = [];
             for (let i = 0; i < r1Fighters.length; i += 2) {
                 bracketQueue.push({ p1: r1Fighters[i], p2: r1Fighters[i+1], round: "ROUND 1" });
             }
-            nextRoundQueue = [...byes];
+            nextRoundQueue = [];
         }
 
         startBtn.addEventListener('click', () => {
             startBtn.parentElement.classList.add('hidden');
-            bgVideo.play().catch(e=>{}); bgMusic.play().catch(e=>{});
+            bgMusic.play().catch(e=>{});
             generateBracket(); nextMatch();
         });
 
         function nextMatch() {
             if (bracketQueue.length === 0) {
-                if (nextRoundQueue.length === 1) { declareChampion(nextRoundQueue[0]); return; }
+                if (nextRoundQueue.length === 1 && byes.length === 0) { declareChampion(nextRoundQueue[0]); return; }
                 bracketQueue = [];
-                for (let i = 0; i < nextRoundQueue.length; i += 2) {
-                    let roundName = nextRoundQueue.length === 8 ? "QUARTERFINALS" : 
-                                    nextRoundQueue.length === 4 ? "SEMIFINALS" : "CHAMPIONSHIP";
-                    bracketQueue.push({ p1: nextRoundQueue[i], p2: nextRoundQueue[i+1], round: roundName });
+                
+                if (byes.length > 0) {
+                    for (let i = 0; i < 4; i++) {
+                        bracketQueue.push({ p1: byes[i], p2: nextRoundQueue[i], round: "QUARTERFINALS" });
+                    }
+                    byes = []; 
+                    nextRoundQueue = [];
+                } else {
+                    let roundName = nextRoundQueue.length === 4 ? "SEMIFINALS" : "CHAMPIONSHIP";
+                    for (let i = 0; i < nextRoundQueue.length; i += 2) {
+                        bracketQueue.push({ p1: nextRoundQueue[i], p2: nextRoundQueue[i+1], round: roundName });
+                    }
+                    nextRoundQueue = [];
                 }
-                nextRoundQueue = [];
             }
             currentMatch = bracketQueue.shift(); setupFight(currentMatch);
         }
@@ -327,12 +338,14 @@
             const attackClass = attackerNum === 1 ? 'anim-attack' : 'anim-attack-p2';
             const hitClass = attackerNum === 1 ? 'anim-hit-p2' : 'anim-hit'; 
 
-            // RANDOMIZE ATTACK! 50/50 chance for punch or kick
             const isPunch = Math.random() > 0.5;
             attackerImg.src = isPunch ? attackerData.imgPunch : attackerData.imgKick;
             attacker.classList.add(attackClass);
             
             setTimeout(() => {
+                strikeSound.currentTime = 0;
+                strikeSound.play().catch(e=>{});
+                
                 defenderImg.src = defenderData.imgHurt;
                 defender.classList.add(hitClass);
                 spawnImpact(attackerNum);
@@ -365,7 +378,6 @@
             const loserImg = loserNum === 1 ? p1Img : p2Img;
             const loserData = loserNum === 1 ? currentMatch.p1 : currentMatch.p2;
             
-            // TRIGGERS YOUR KO GIF!
             loserImg.src = loserData.imgKO;
 
             flashAnnouncer("K.O.", 2500, () => {
@@ -390,10 +402,13 @@
         }
 
         function declareChampion(winner) {
-            assignPick(winner); document.getElementById('winner-announcement').play().catch(e=>{});
+            assignPick(winner); 
+            document.getElementById('winner-announcement').play().catch(e=>{});
+            document.getElementById('trophy-sound').play().catch(e=>{});
+            
             flashAnnouncer("CHAMPION!", 3000, () => {
                 document.getElementById('stage').innerHTML = `
-                    <video class="video-bg" loop muted autoplay playsinline src="ring.mp4"></video>
+                    <img class="video-bg" src="background.gif" alt="Fighting Stage">
                     <div style="position:absolute; z-index:100; text-align:center; width:100%; top:20%;">
                         <img src="trophy.svg" alt="Trophy" style="height:250px; margin: 0 auto; filter: drop-shadow(0 0 30px #FBBF24);" onerror="this.onerror=null;this.src='https://placehold.co/250x250?text=🏆';">
                         <div class="font-bebas text-amber-400" style="font-size: 5rem; text-shadow: 4px 4px 0 #000;">${winner.name}</div>
