@@ -8,216 +8,124 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         html, body {
-            height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
+            height: 100%; overflow: hidden; background-color: #000; color: #fff;
+            font-family: 'Inter', sans-serif; display: flex; flex-direction: column;
         }
         .font-bebas { font-family: 'Bebas Neue', cursive; }
 
-        /* Stage */
         #stage {
-            position: relative;
-            width: 100%;
-            max-width: 1400px;
-            height: 650px;
-            background-color: #1a1a1a;
-            border: 8px solid #333;
-            border-radius: 1rem;
-            margin: auto;
-            overflow: hidden;
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+            position: relative; width: 100%; max-width: 1400px; height: 650px;
+            background-color: #1a1a1a; border: 8px solid #333; border-radius: 1rem;
+            margin: auto; overflow: hidden; box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
         }
 
         .video-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: cover;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            opacity: 0.6; /* Dim background to make fighters pop */
+            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
+            width: auto; height: auto; object-fit: cover; transform: translate(-50%, -50%);
+            z-index: 1; opacity: 0.6; 
         }
 
-        /* Health Bars UI */
         #hud {
-            position: absolute;
-            top: 0; left: 0; width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 50;
-            box-sizing: border-box;
+            position: absolute; top: 0; left: 0; width: 100%; padding: 20px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 50; box-sizing: border-box;
         }
 
-        .player-hud {
-            width: 40%;
-        }
-
+        .player-hud { width: 40%; }
         .player-name {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 4px #000;
-            margin-bottom: 5px;
+            font-family: 'Bebas Neue', cursive; font-size: 2.5rem;
+            text-transform: uppercase; text-shadow: 2px 2px 4px #000; margin-bottom: 5px;
         }
         .p2-hud .player-name { text-align: right; }
 
         .health-bar-container {
-            width: 100%;
-            height: 35px;
-            background-color: #333;
-            border: 3px solid #ddd;
-            border-radius: 5px;
-            position: relative;
-            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+            width: 100%; height: 35px; background-color: #333; border: 3px solid #ddd;
+            border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
 
         .health-bar {
-            height: 100%;
-            background: linear-gradient(to bottom, #ff3333, #aa0000);
-            width: 100%;
+            height: 100%; width: 100%; background: linear-gradient(to bottom, #ff3333, #aa0000);
             transition: width 0.2s ease-out;
         }
-        
-        .p2-hud .health-bar {
-            float: right; /* Drain from left to right for P2 */
-        }
+        .p2-hud .health-bar { float: right; }
 
         #vs-badge {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 4rem;
-            color: #FBBF24;
-            text-shadow: 0 0 20px #ff0000, 2px 2px 0px #000;
-            animation: pulse 1s infinite alternate;
+            font-family: 'Bebas Neue', cursive; font-size: 4rem; color: #FBBF24;
+            text-shadow: 0 0 20px #ff0000, 2px 2px 0px #000; animation: pulse 1s infinite alternate;
         }
 
-        /* Overlay Messages (FIGHT!, KO!) */
         #announcer-text {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            font-family: 'Bebas Neue', cursive;
-            font-size: 8rem;
-            color: #FBBF24;
-            text-shadow: 6px 6px 0px #b91c1c, 0 0 40px rgba(0,0,0,0.8);
-            z-index: 60;
-            opacity: 0;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+            font-family: 'Bebas Neue', cursive; font-size: 8rem; color: #FBBF24;
+            text-shadow: 6px 6px 0px #b91c1c, 0 0 40px rgba(0,0,0,0.8); z-index: 60; opacity: 0;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
         }
-        
-        .show-announce {
-            transform: translate(-50%, -50%) scale(1) !important;
-            opacity: 1 !important;
-        }
+        .show-announce { transform: translate(-50%, -50%) scale(1) !important; opacity: 1 !important; }
 
-        /* Fighter Setup */
         .fighter {
-            position: absolute;
-            bottom: 50px; /* Stand on the floor */
-            width: 250px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 20;
-            transition: transform 0.15s ease-out;
+            position: absolute; bottom: 50px; width: 250px; display: flex;
+            flex-direction: column; align-items: center; z-index: 20; transition: transform 0.1s ease-out;
         }
 
         #fighter-1 { left: 15%; }
         #fighter-2 { right: 15%; } 
-        
-        /* Flip JUST the image for Player 2, so the text stays normal */
         #fighter-2 .fighter-image { transform: scaleX(-1); } 
 
         .fighter-image {
-            width: 100%;
-            height: auto;
+            width: 100%; height: auto; max-height: 400px; object-fit: contain;
             filter: drop-shadow(0px 20px 10px rgba(0,0,0,0.6));
             transition: filter 0.1s, transform 0.1s;
+            image-rendering: pixelated; /* Keeps pixel art crisp! */
         }
 
         .fighter-name-tag {
-            display: inline-block;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-top: -15px;
-            z-index: 21;
+            display: inline-block; background-color: rgba(0, 0, 0, 0.7); color: #fff;
+            padding: 4px 12px; border-radius: 4px; font-weight: bold; margin-top: -15px; z-index: 21;
         }
 
-        /* Animations */
-        .anim-idle { animation: breathe 2s infinite alternate ease-in-out; }
-        .anim-attack { transform: translateX(100px) scale(1.1) rotate(10deg) !important; }
-        .anim-attack-p2 { transform: translateX(-100px) scale(1.1) rotate(-10deg) !important; }
+        .anim-attack { transform: translateX(120px) !important; }
+        .anim-attack-p2 { transform: translateX(-120px) !important; }
         .anim-hit { 
             filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(3) drop-shadow(0px 0px 20px red) !important;
-            transform: translateX(-20px) rotate(-5deg);
+            transform: translateX(-30px);
         }
         .anim-hit-p2 {
             filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(3) drop-shadow(0px 0px 20px red) !important;
-            transform: translateX(20px) rotate(5deg);
+            transform: translateX(30px);
         }
+        
         .anim-ko {
-            transform: translateY(100px) rotate(90deg) scale(0.8) !important;
-            filter: grayscale(100%) opacity(0.5);
-            transition: transform 1s ease-in, filter 1s;
+            /* Now using the KO GIF, so we just fade them out instead of rotating */
+            filter: grayscale(100%);
+            animation: fadeOut 2.5s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
-        @keyframes breathe {
-            0% { transform: translateY(0) scaleY(1); }
-            100% { transform: translateY(-5px) scaleY(1.02); }
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
 
-        /* Particles */
         .particle {
-            position: absolute;
-            font-size: 3rem;
-            z-index: 40;
-            pointer-events: none;
-            animation: popOut 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: absolute; font-size: 3rem; z-index: 40; pointer-events: none;
+            animation: popOut 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         @keyframes popOut {
             0% { transform: scale(0.5) translate(0, 0); opacity: 1; }
             100% { transform: scale(1.5) translate(var(--tx), var(--ty)); opacity: 0; }
         }
 
-        /* Draft Board */
         #ticker {
-            background-color: #111;
-            border-top: 4px solid #FBBF24;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 10px;
+            background-color: #111; border-top: 4px solid #FBBF24; overflow-x: auto;
+            white-space: nowrap; padding: 10px;
         }
         .pick-card {
-            display: inline-block;
-            background-color: #222;
-            border: 1px solid #444;
-            border-radius: 0.5rem;
-            padding: 0.5rem 1rem;
-            margin: 0 0.5rem;
-            min-width: 150px;
-            text-align: center;
-            animation: slideInRight 0.5s ease-out;
+            display: inline-block; background-color: #222; border: 1px solid #444;
+            border-radius: 0.5rem; padding: 0.5rem 1rem; margin: 0 0.5rem;
+            min-width: 150px; text-align: center; animation: slideInRight 0.5s ease-out;
         }
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
@@ -228,17 +136,14 @@
     </header>
 
     <main class="flex-grow flex flex-col items-center justify-center p-2">
-        
         <div id="controls" class="text-center mb-4 z-50 absolute">
             <button id="startButton" class="font-bebas bg-amber-400 text-gray-900 text-4xl px-12 py-4 rounded-lg shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:bg-amber-300 hover:scale-105 transition-all">
                 BEGIN TOURNAMENT
             </button>
         </div>
-
         <div id="stage">
              <video id="bg-video" class="video-bg" loop muted playsinline src="ring.mp4"></video>
              
-             <!-- Heads Up Display (Hidden until fight starts) -->
              <div id="hud" class="hidden">
                  <div class="player-hud p1-hud">
                      <div class="player-name text-amber-400" id="p1-name">Player 1</div>
@@ -253,13 +158,12 @@
 
              <div id="announcer-text">FIGHT!</div>
 
-             <!-- Fighters Container -->
              <div id="fighters-container" class="hidden">
-                 <div id="fighter-1" class="fighter anim-idle">
+                 <div id="fighter-1" class="fighter">
                      <img id="p1-img" src="" class="fighter-image">
                      <span id="p1-tag" class="fighter-name-tag"></span>
                  </div>
-                 <div id="fighter-2" class="fighter anim-idle">
+                 <div id="fighter-2" class="fighter">
                      <img id="p2-img" src="" class="fighter-image">
                      <span id="p2-tag" class="fighter-name-tag"></span>
                  </div>
@@ -268,39 +172,50 @@
     </main>
 
     <footer id="ticker-container" class="w-full">
-        <div id="ticker" class="w-full h-24 flex items-center">
-            <!-- Draft picks populate here, right to left (Pick 12 down to Pick 1) -->
-        </div>
+        <div id="ticker" class="w-full h-24 flex items-center"></div>
     </footer>
     
-    <!-- Audio Elements -->
     <audio id="bg-music" loop src="whoop-yo-ass-boy.mp3"></audio>
-    <audio id="hit-sound" src="gong-hit.mp3"></audio> 
     <audio id="ko-sound" src="crowd-ovation.mp3"></audio>
     <audio id="winner-announcement" src="WinnerIs.mp3"></audio>
 
     <script>
-        // --- DATA ---
+        // --- TEMPORARY TEST DATA USING YOUR 5 FILES ---
+        const testFiles = {
+            idle: "standing.gif",
+            punch: "throwpunch.gif",
+            kick: "throwkick.gif",
+            hurt: "gettingpunched.gif",
+            ko: "gethittoground.gif"
+        };
+
         const TEAMS = [
-            { id: 1, name: "Brianna's Sweaterdress", image: "player1.png", eliminationSound: "BSgone.mp3" },
-            { id: 2, name: "Stucknut", image: "player2.png", eliminationSound: "SNgone.mp3" },
-            { id: 3, name: "LaMario Kart", image: "player3.png", eliminationSound: "LCout.mp3" },
-            { id: 4, name: "SparkleBrite Static", image: "player4.png", eliminationSound: "SBSout.mp3" },
-            { id: 5, name: "Joelslaw", image: "player5.png", eliminationSound: "JSseeya.mp3" },
-            { id: 6, name: "Brianna's Johnson", image: "player6.png", eliminationSound: "BJseeya.mp3" },
-            { id: 7, name: "Warden Ward", image: "player7.png", eliminationSound: "WWbuhbye.mp3" },
-            { id: 8, name: "Chattahoochee Coochie", image: "player8.png", eliminationSound: "CCbuhbye.mp3" },
-            { id: 9, name: "Randy's Virgins", image: "player9.png", eliminationSound: "RVnicetry.mp3" },
-            { id: 10, name: "Tuna Can Dan", image: "player10.png", eliminationSound: "TCDsolongsucka.mp3" },
-            { id: 11, name: "Fairdealing's Finest", image: "player11.png", eliminationSound: "FFsolongsucka.mp3" },
-            { id: 12, name: "Crisco Cops", image: "player12.png", eliminationSound: "CCnicetry.mp3" },
+            { id: 1, name: "Brianna's Sweaterdress", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 2, name: "Stucknut", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 3, name: "LaMario Kart", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 4, name: "SparkleBrite Static", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 5, name: "Joelslaw", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 6, name: "Brianna's Johnson", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 7, name: "Warden Ward", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 8, name: "Chattahoochee Coochie", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 9, name: "Randy's Virgins", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 10, name: "Tuna Can Dan", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 11, name: "Fairdealing's Finest", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
+            { id: 12, name: "Crisco Cops", eliminationSound: "", imgIdle: testFiles.idle, imgPunch: testFiles.punch, imgKick: testFiles.kick, imgHurt: testFiles.hurt, imgKO: testFiles.ko },
         ];
 
-        // --- DOM Elements ---
+        function preloadImages() {
+            new Image().src = testFiles.idle;
+            new Image().src = testFiles.punch;
+            new Image().src = testFiles.kick;
+            new Image().src = testFiles.hurt;
+            new Image().src = testFiles.ko;
+        }
+        preloadImages();
+
         const startBtn = document.getElementById('startButton');
         const bgVideo = document.getElementById('bg-video');
         const bgMusic = document.getElementById('bg-music');
-        const hitSound = document.getElementById('hit-sound');
         const koSound = document.getElementById('ko-sound');
         const hud = document.getElementById('hud');
         const fightersContainer = document.getElementById('fighters-container');
@@ -308,59 +223,37 @@
         
         const f1 = document.getElementById('fighter-1');
         const f2 = document.getElementById('fighter-2');
+        const p1Img = document.getElementById('p1-img');
+        const p2Img = document.getElementById('p2-img');
         const p1HealthBar = document.getElementById('p1-health');
         const p2HealthBar = document.getElementById('p2-health');
         const ticker = document.getElementById('ticker');
 
-        bgMusic.volume = 0.3;
-        hitSound.volume = 0.8;
-        koSound.volume = 0.7;
+        bgMusic.volume = 0.3; koSound.volume = 0.7;
 
-        let bracketQueue = [];
-        let nextRoundQueue = [];
-        let draftPicks = [];
-        let currentPickNumber = 12; // Start assigning at 12
-        let fightInterval;
+        let bracketQueue = []; let nextRoundQueue = [];
+        let currentPickNumber = 12; let fightInterval; let currentMatch = null;
 
-        // --- Bracket Logic ---
         function generateBracket() {
             let shuffled = [...TEAMS].sort(() => Math.random() - 0.5);
-            
-            // 12 Teams -> 4 Byes, 8 fight in Round 1
             const byes = shuffled.slice(0, 4);
             const r1Fighters = shuffled.slice(4, 12);
-
-            // Populate Round 1 matches
             bracketQueue = [];
             for (let i = 0; i < r1Fighters.length; i += 2) {
                 bracketQueue.push({ p1: r1Fighters[i], p2: r1Fighters[i+1], round: "ROUND 1" });
             }
-            
-            // Byes wait in the next round queue
             nextRoundQueue = [...byes];
         }
 
-        // --- Game Flow ---
         startBtn.addEventListener('click', () => {
             startBtn.parentElement.classList.add('hidden');
-            initTournament();
+            bgVideo.play().catch(e=>{}); bgMusic.play().catch(e=>{});
+            generateBracket(); nextMatch();
         });
-
-        function initTournament() {
-            bgVideo.play().catch(e=>{});
-            bgMusic.play().catch(e=>{});
-            generateBracket();
-            nextMatch();
-        }
 
         function nextMatch() {
             if (bracketQueue.length === 0) {
-                if (nextRoundQueue.length === 1) {
-                    // WE HAVE A CHAMPION
-                    declareChampion(nextRoundQueue[0]);
-                    return;
-                }
-                // Build next round
+                if (nextRoundQueue.length === 1) { declareChampion(nextRoundQueue[0]); return; }
                 bracketQueue = [];
                 for (let i = 0; i < nextRoundQueue.length; i += 2) {
                     let roundName = nextRoundQueue.length === 8 ? "QUARTERFINALS" : 
@@ -369,101 +262,88 @@
                 }
                 nextRoundQueue = [];
             }
-
-            let match = bracketQueue.shift();
-            setupFight(match);
+            currentMatch = bracketQueue.shift(); setupFight(currentMatch);
         }
 
         function flashAnnouncer(text, duration, callback) {
-            announcer.textContent = text;
-            announcer.classList.add('show-announce');
+            announcer.textContent = text; announcer.classList.add('show-announce');
             setTimeout(() => {
                 announcer.classList.remove('show-announce');
-                if (callback) setTimeout(callback, 300); // slight delay after hiding
+                if (callback) setTimeout(callback, 300); 
             }, duration);
         }
 
         function setupFight(match) {
-            // Reset visuals
-            f1.className = 'fighter anim-idle';
-            f2.className = 'fighter anim-idle';
-            p1HealthBar.style.width = '100%';
-            p2HealthBar.style.width = '100%';
+            f1.className = 'fighter'; f2.className = 'fighter';
+            p1HealthBar.style.width = '100%'; p2HealthBar.style.width = '100%';
             
-            // Set Data
             document.getElementById('p1-name').textContent = match.p1.name;
             document.getElementById('p2-name').textContent = match.p2.name;
-            document.getElementById('p1-img').src = match.p1.image;
-            document.getElementById('p2-img').src = match.p2.image;
             document.getElementById('p1-tag').textContent = match.p1.name;
             document.getElementById('p2-tag').textContent = match.p2.name;
-            // Fallback for missing images
-            document.getElementById('p1-img').onerror = function() { this.src = 'https://placehold.co/150x200?text=Fighter'; };
-            document.getElementById('p2-img').onerror = function() { this.src = 'https://placehold.co/150x200?text=Fighter'; };
+            
+            p1Img.src = match.p1.imgIdle; p2Img.src = match.p2.imgIdle;
+            
+            p1Img.onerror = function() { this.src = 'https://placehold.co/150x200?text=Fighter'; };
+            p2Img.onerror = function() { this.src = 'https://placehold.co/150x200?text=Fighter'; };
 
-            // Show UI
-            hud.classList.remove('hidden');
-            fightersContainer.classList.remove('hidden');
+            hud.classList.remove('hidden'); fightersContainer.classList.remove('hidden');
 
             flashAnnouncer(match.round, 2000, () => {
-                flashAnnouncer("FIGHT!", 1000, () => {
-                    startCombat(match.p1, match.p2);
-                });
+                flashAnnouncer("FIGHT!", 1000, () => { startCombat(match.p1, match.p2); });
             });
         }
 
-        // --- Combat Engine ---
         function startCombat(p1Data, p2Data) {
-            let p1Hp = 100;
-            let p2Hp = 100;
-
+            let p1Hp = 100; let p2Hp = 100;
             fightInterval = setInterval(() => {
-                // Randomize attacker (slight edge can be added here if desired)
                 let attackerIsP1 = Math.random() > 0.5;
-                let damage = Math.floor(Math.random() * 15) + 10; // 10 to 25 damage
+                let damage = Math.floor(Math.random() * 15) + 10; 
 
                 if (attackerIsP1) {
-                    p2Hp -= damage;
-                    if(p2Hp < 0) p2Hp = 0;
-                    p2HealthBar.style.width = `${p2Hp}%`;
-                    animateStrike(1);
+                    p2Hp -= damage; if(p2Hp < 0) p2Hp = 0;
+                    p2HealthBar.style.width = `${p2Hp}%`; animateStrike(1);
                 } else {
-                    p1Hp -= damage;
-                    if(p1Hp < 0) p1Hp = 0;
-                    p1HealthBar.style.width = `${p1Hp}%`;
-                    animateStrike(2);
+                    p1Hp -= damage; if(p1Hp < 0) p1Hp = 0;
+                    p1HealthBar.style.width = `${p1Hp}%`; animateStrike(2);
                 }
 
                 if (p1Hp <= 0 || p2Hp <= 0) {
                     clearInterval(fightInterval);
                     handleKnockout(p1Hp <= 0 ? p1Data : p2Data, p1Hp <= 0 ? p2Data : p1Data, p1Hp <= 0 ? 1 : 2);
                 }
-
-            }, 800); // Time between strikes
+            }, 900); 
         }
 
         function animateStrike(attackerNum) {
             const attacker = attackerNum === 1 ? f1 : f2;
             const defender = attackerNum === 1 ? f2 : f1;
-            const attackClass = attackerNum === 1 ? 'anim-attack' : 'anim-attack-p2';
-            const hitClass = attackerNum === 1 ? 'anim-hit-p2' : 'anim-hit'; // Defender gets hit class
+            const attackerImg = attackerNum === 1 ? p1Img : p2Img;
+            const defenderImg = attackerNum === 1 ? p2Img : p1Img;
+            
+            const attackerData = attackerNum === 1 ? currentMatch.p1 : currentMatch.p2;
+            const defenderData = attackerNum === 1 ? currentMatch.p2 : currentMatch.p1;
 
-            // Lunge
+            const attackClass = attackerNum === 1 ? 'anim-attack' : 'anim-attack-p2';
+            const hitClass = attackerNum === 1 ? 'anim-hit-p2' : 'anim-hit'; 
+
+            // RANDOMIZE ATTACK! 50/50 chance for punch or kick
+            const isPunch = Math.random() > 0.5;
+            attackerImg.src = isPunch ? attackerData.imgPunch : attackerData.imgKick;
             attacker.classList.add(attackClass);
             
             setTimeout(() => {
-                // Connect
-                hitSound.currentTime = 0;
-                hitSound.play().catch(e=>{});
+                defenderImg.src = defenderData.imgHurt;
                 defender.classList.add(hitClass);
                 spawnImpact(attackerNum);
 
-                // Reset
                 setTimeout(() => {
+                    attackerImg.src = attackerData.imgIdle;
+                    defenderImg.src = defenderData.imgIdle;
                     attacker.classList.remove(attackClass);
                     defender.classList.remove(hitClass);
-                }, 150);
-            }, 100);
+                }, 300); 
+            }, 100); 
         }
 
         function spawnImpact(attackerNum) {
@@ -472,10 +352,7 @@
             particle.className = 'particle';
             particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             
-            // Spawn roughly in the middle
-            particle.style.left = '50%';
-            particle.style.top = '40%';
-            
+            particle.style.left = '50%'; particle.style.top = '40%';
             const direction = attackerNum === 1 ? 1 : -1;
             particle.style.setProperty('--tx', `${direction * (50 + Math.random() * 100)}px`);
             particle.style.setProperty('--ty', `-${50 + Math.random() * 50}px`);
@@ -485,61 +362,43 @@
         }
 
         function handleKnockout(loser, winner, loserNum) {
+            const loserImg = loserNum === 1 ? p1Img : p2Img;
+            const loserData = loserNum === 1 ? currentMatch.p1 : currentMatch.p2;
+            
+            // TRIGGERS YOUR KO GIF!
+            loserImg.src = loserData.imgKO;
+
             flashAnnouncer("K.O.", 2500, () => {
-                // Play custom elimination sound
                 if (loser.eliminationSound) {
                     let audio = new Audio(loser.eliminationSound);
-                    audio.volume = 0.9;
-                    audio.play().catch(e=>{});
+                    audio.volume = 0.9; audio.play().catch(e=>{});
                 }
-                
-                // Advance winner
-                nextRoundQueue.push(winner);
-                
-                // Add loser to draft board
-                assignPick(loser);
-
-                // Hide fighters and prep next
-                hud.classList.add('hidden');
-                fightersContainer.classList.add('hidden');
+                nextRoundQueue.push(winner); assignPick(loser);
+                hud.classList.add('hidden'); fightersContainer.classList.add('hidden');
                 setTimeout(nextMatch, 1500);
             });
 
-            // Animate the loser falling
             const loserEl = loserNum === 1 ? f1 : f2;
             loserEl.classList.add('anim-ko');
-            
-            koSound.currentTime = 0;
-            koSound.play().catch(e=>{});
+            koSound.currentTime = 0; koSound.play().catch(e=>{});
         }
 
         function assignPick(team) {
-            const pickCard = document.createElement('div');
-            pickCard.className = 'pick-card';
-            pickCard.innerHTML = `
-                <div class="font-bebas text-2xl text-amber-400">PICK ${currentPickNumber}</div>
-                <div class="font-bold text-sm truncate">${team.name}</div>
-            `;
-            // Add to front of ticker so it reads Left to Right (12...1)
-            ticker.insertBefore(pickCard, ticker.firstChild);
-            currentPickNumber--;
+            const pickCard = document.createElement('div'); pickCard.className = 'pick-card';
+            pickCard.innerHTML = `<div class="font-bebas text-2xl text-amber-400">PICK ${currentPickNumber}</div><div class="font-bold text-sm truncate">${team.name}</div>`;
+            ticker.insertBefore(pickCard, ticker.firstChild); currentPickNumber--;
         }
 
         function declareChampion(winner) {
-            assignPick(winner); // Assigns Pick 1
-            
-            document.getElementById('winner-announcement').play().catch(e=>{});
-
+            assignPick(winner); document.getElementById('winner-announcement').play().catch(e=>{});
             flashAnnouncer("CHAMPION!", 3000, () => {
-                // Cleanup screen
                 document.getElementById('stage').innerHTML = `
                     <video class="video-bg" loop muted autoplay playsinline src="ring.mp4"></video>
                     <div style="position:absolute; z-index:100; text-align:center; width:100%; top:20%;">
                         <img src="trophy.svg" alt="Trophy" style="height:250px; margin: 0 auto; filter: drop-shadow(0 0 30px #FBBF24);" onerror="this.onerror=null;this.src='https://placehold.co/250x250?text=🏆';">
                         <div class="font-bebas text-amber-400" style="font-size: 5rem; text-shadow: 4px 4px 0 #000;">${winner.name}</div>
                         <div class="font-bebas text-white" style="font-size: 3rem; text-shadow: 2px 2px 0 #000;">CLAIMS THE #1 PICK</div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
     </script>
