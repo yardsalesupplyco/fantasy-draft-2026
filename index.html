@@ -330,6 +330,7 @@
             nextRoundQueue = [];
         }
 
+        // SILENT AUDIO PRIMING FOR MOBILE
         startBtn.addEventListener('click', () => {
             startBtn.parentElement.classList.add('hidden');
             
@@ -341,10 +342,14 @@
 
             allAudios.forEach(audio => {
                 if (audio) {
+                    audio.muted = true; // Mute while unlocking
                     audio.play().then(() => {
                         if (audio !== bgMusic) {
                             audio.pause();
                             audio.currentTime = 0;
+                            audio.muted = false; // Restore sound for later playback
+                        } else {
+                            audio.muted = false;
                         }
                     }).catch(e => {});
                 }
