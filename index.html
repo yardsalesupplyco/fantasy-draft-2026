@@ -126,6 +126,75 @@
             min-width: 150px; text-align: center; animation: slideInRight 0.5s ease-out;
         }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* --- MOBILE RESPONSIVE OVERRIDES --- */
+        @media (max-width: 768px) {
+            #stage {
+                height: 52vh;
+                min-height: 350px;
+                border-width: 4px;
+                border-radius: 0.5rem;
+            }
+
+            #hud {
+                padding: 10px 15px;
+            }
+
+            .player-name {
+                font-size: 1.2rem;
+                margin-bottom: 2px;
+            }
+
+            .health-bar-container {
+                height: 18px;
+                border-width: 2px;
+            }
+
+            #vs-badge {
+                font-size: 2rem;
+            }
+
+            #announcer-text {
+                font-size: 4rem;
+            }
+
+            .fighter {
+                width: 140px;
+                bottom: 15px;
+            }
+
+            #fighter-1 { left: 8%; }
+            #fighter-2 { right: 8%; }
+
+            .fighter-name-tag {
+                font-size: 0.65rem;
+                padding: 2px 6px;
+                margin-top: -8px;
+            }
+
+            .anim-attack { transform: translateX(45px) !important; }
+            .anim-attack-p2 { transform: translateX(-45px) !important; }
+            .anim-hit { transform: translateX(-10px) !important; }
+            .anim-hit-p2 { transform: translateX(10px) !important; }
+
+            .particle {
+                font-size: 2rem;
+            }
+
+            #startButton {
+                font-size: 2rem;
+                padding: 0.75rem 2rem;
+            }
+
+            header h1 {
+                font-size: 2.25rem;
+            }
+
+            .pick-card {
+                min-width: 110px;
+                padding: 0.25rem 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -172,7 +241,7 @@
     </main>
 
     <footer id="ticker-container" class="w-full">
-        <div id="ticker" class="w-full h-24 flex items-center"></div>
+        <div id="ticker" class="w-full h-20 flex items-center"></div>
     </footer>
     
     <!-- Audio Elements -->
@@ -431,7 +500,7 @@
 
         function assignPick(team) {
             const pickCard = document.createElement('div'); pickCard.className = 'pick-card';
-            pickCard.innerHTML = `<div class="font-bebas text-2xl text-amber-400">PICK ${currentPickNumber}</div><div class="font-bold text-sm truncate">${team.name}</div>`;
+            pickCard.innerHTML = `<div class="font-bebas text-xl sm:text-2xl text-amber-400">PICK ${currentPickNumber}</div><div class="font-bold text-xs sm:text-sm truncate">${team.name}</div>`;
             ticker.insertBefore(pickCard, ticker.firstChild); currentPickNumber--;
         }
 
@@ -444,9 +513,9 @@
                 document.getElementById('stage').innerHTML = `
                     <img class="video-bg" src="background.gif" alt="Fighting Stage">
                     <div style="position:absolute; z-index:100; text-align:center; width:100%; top:20%;">
-                        <img src="trophy.svg" alt="Trophy" style="height:250px; margin: 0 auto; filter: drop-shadow(0 0 30px #FBBF24);" onerror="this.onerror=null;this.src='https://placehold.co/250x250?text=🏆';">
-                        <div class="font-bebas text-amber-400" style="font-size: 5rem; text-shadow: 4px 4px 0 #000;">${winner.name}</div>
-                        <div class="font-bebas text-white" style="font-size: 3rem; text-shadow: 2px 2px 0 #000;">CLAIMS THE #1 PICK</div>
+                        <img src="trophy.svg" alt="Trophy" style="height:180px; margin: 0 auto; filter: drop-shadow(0 0 30px #FBBF24);" onerror="this.onerror=null;this.src='https://placehold.co/180x180?text=🏆';">
+                        <div class="font-bebas text-amber-400 text-3xl sm:text-6xl" style="text-shadow: 3px 3px 0 #000;">${winner.name}</div>
+                        <div class="font-bebas text-white text-xl sm:text-4xl" style="text-shadow: 2px 2px 0 #000;">CLAIMS THE #1 PICK</div>
                     </div>`;
             });
         }
