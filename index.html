@@ -252,18 +252,18 @@
 
     <script>
         const TEAMS = [
-            { id: 1, name: "Brianna's Sweaterdress", eliminationSound: "BSgone.mp3", imgIdle: "p1-idle.gif", imgPunchLeft: "p1-left-punch.gif", imgPunchRight: "p1-right-punch.gif", imgKick: "p1-kick.gif", imgHurt: "p1-hurt.gif", imgKO: "p1-dead.gif" },
-            { id: 2, name: "Stucknut", eliminationSound: "SNgone.mp3", imgIdle: "p2-idle.gif", imgPunchLeft: "p2-left-punch.gif", imgPunchRight: "p2-right-punch.gif", imgKick: "p2-kick.gif", imgHurt: "p2-hurt.gif", imgKO: "p2-dead.gif" },
-            { id: 3, name: "LaMario Kart", eliminationSound: "LCout.mp3", imgIdle: "p3-idle.gif", imgPunchLeft: "p3-left-punch.gif", imgPunchRight: "p3-right-punch.gif", imgKick: "p3-kick.gif", imgHurt: "p3-hurt.gif", imgKO: "p3-dead.gif" },
-            { id: 4, name: "SparkleBrite Static", eliminationSound: "SBSout.mp3", imgIdle: "p4-idle.gif", imgPunchLeft: "p4-left-punch.gif", imgPunchRight: "p4-right-punch.gif", imgKick: "p4-kick.gif", imgHurt: "p4-hurt.gif", imgKO: "p4-dead.gif" },
-            { id: 5, name: "Joelslaw", eliminationSound: "JSseeya.mp3", imgIdle: "p5-idle.gif", imgPunchLeft: "p5-left-punch.gif", imgPunchRight: "p5-right-punch.gif", imgKick: "p5-kick.gif", imgHurt: "p5-hurt.gif", imgKO: "p5-dead.gif" },
-            { id: 6, name: "Brianna's Johnson", eliminationSound: "BJseeya.mp3", imgIdle: "p6-idle.gif", imgPunchLeft: "p6-left-punch.gif", imgPunchRight: "p6-right-punch.gif", imgKick: "p6-kick.gif", imgHurt: "p6-hurt.gif", imgKO: "p6-dead.gif" },
-            { id: 7, name: "Warden Ward", eliminationSound: "WWbuhbye.mp3", imgIdle: "p7-idle.gif", imgPunchLeft: "p7-left-punch.gif", imgPunchRight: "p7-right-punch.gif", imgKick: "p7-kick.gif", imgHurt: "p7-hurt.gif", imgKO: "p7-dead.gif" },
-            { id: 8, name: "Chattahoochee Coochie", eliminationSound: "CCbuhbye.mp3", imgIdle: "p8-idle.gif", imgPunchLeft: "p8-left-punch.gif", imgPunchRight: "p8-right-punch.gif", imgKick: "p8-kick.gif", imgHurt: "p8-hurt.gif", imgKO: "p8-dead.gif" },
-            { id: 9, name: "Randy's Virgins", eliminationSound: "RVnicetry.mp3", imgIdle: "p9-idle.gif", imgPunchLeft: "p9-left-punch.gif", imgPunchRight: "p9-right-punch.gif", imgKick: "p9-kick.gif", imgHurt: "p9-hurt.gif", imgKO: "p9-dead.gif" },
-            { id: 10, name: "Tuna Can Dan", eliminationSound: "TCDsolongsucka.mp3", imgIdle: "p10-idle.gif", imgPunchLeft: "p10-left-punch.gif", imgPunchRight: "p10-right-punch.gif", imgKick: "p10-kick.gif", imgHurt: "p10-hurt.gif", imgKO: "p10-dead.gif" },
-            { id: 11, name: "Fairdealing's Finest", eliminationSound: "FFsolongsucka.mp3", imgIdle: "p11-idle.gif", imgPunchLeft: "p11-left-punch.gif", imgPunchRight: "p11-right-punch.gif", imgKick: "p11-kick.gif", imgHurt: "p11-hurt.gif", imgKO: "p11-dead.gif" },
-            { id: 12, name: "Crisco Cops", eliminationSound: "CCnicetry.mp3", imgIdle: "p12-idle.gif", imgPunchLeft: "p12-left-punch.gif", imgPunchRight: "p12-right-punch.gif", imgKick: "p12-kick.gif", imgHurt: "p12-hurt.gif", imgKO: "p12-dead.gif" },
+            { id: 1, name: "Brianna's Sweaterdress", eliminationAudio: new Audio("BSgone.mp3"), imgIdle: "p1-idle.gif", imgPunchLeft: "p1-left-punch.gif", imgPunchRight: "p1-right-punch.gif", imgKick: "p1-kick.gif", imgHurt: "p1-hurt.gif", imgKO: "p1-dead.gif" },
+            { id: 2, name: "Stucknut", eliminationAudio: new Audio("SNgone.mp3"), imgIdle: "p2-idle.gif", imgPunchLeft: "p2-left-punch.gif", imgPunchRight: "p2-right-punch.gif", imgKick: "p2-kick.gif", imgHurt: "p2-hurt.gif", imgKO: "p2-dead.gif" },
+            { id: 3, name: "LaMario Kart", eliminationAudio: new Audio("LCout.mp3"), imgIdle: "p3-idle.gif", imgPunchLeft: "p3-left-punch.gif", imgPunchRight: "p3-right-punch.gif", imgKick: "p3-kick.gif", imgHurt: "p3-hurt.gif", imgKO: "p3-dead.gif" },
+            { id: 4, name: "SparkleBrite Static", eliminationAudio: new Audio("SBSout.mp3"), imgIdle: "p4-idle.gif", imgPunchLeft: "p4-left-punch.gif", imgPunchRight: "p4-right-punch.gif", imgKick: "p4-kick.gif", imgHurt: "p4-hurt.gif", imgKO: "p4-dead.gif" },
+            { id: 5, name: "Joelslaw", eliminationAudio: new Audio("JSseeya.mp3"), imgIdle: "p5-idle.gif", imgPunchLeft: "p5-left-punch.gif", imgPunchRight: "p5-right-punch.gif", imgKick: "p5-kick.gif", imgHurt: "p5-hurt.gif", imgKO: "p5-dead.gif" },
+            { id: 6, name: "Brianna's Johnson", eliminationAudio: new Audio("BJseeya.mp3"), imgIdle: "p6-idle.gif", imgPunchLeft: "p6-left-punch.gif", imgPunchRight: "p6-right-punch.gif", imgKick: "p6-kick.gif", imgHurt: "p6-hurt.gif", imgKO: "p6-dead.gif" },
+            { id: 7, name: "Warden Ward", eliminationAudio: new Audio("WWbuhbye.mp3"), imgIdle: "p7-idle.gif", imgPunchLeft: "p7-left-punch.gif", imgPunchRight: "p7-right-punch.gif", imgKick: "p7-kick.gif", imgHurt: "p7-hurt.gif", imgKO: "p7-dead.gif" },
+            { id: 8, name: "Chattahoochee Coochie", eliminationAudio: new Audio("CCbuhbye.mp3"), imgIdle: "p8-idle.gif", imgPunchLeft: "p8-left-punch.gif", imgPunchRight: "p8-right-punch.gif", imgKick: "p8-kick.gif", imgHurt: "p8-hurt.gif", imgKO: "p8-dead.gif" },
+            { id: 9, name: "Randy's Virgins", eliminationAudio: new Audio("RVnicetry.mp3"), imgIdle: "p9-idle.gif", imgPunchLeft: "p9-left-punch.gif", imgPunchRight: "p9-right-punch.gif", imgKick: "p9-kick.gif", imgHurt: "p9-hurt.gif", imgKO: "p9-dead.gif" },
+            { id: 10, name: "Tuna Can Dan", eliminationAudio: new Audio("TCDsolongsucka.mp3"), imgIdle: "p10-idle.gif", imgPunchLeft: "p10-left-punch.gif", imgPunchRight: "p10-right-punch.gif", imgKick: "p10-kick.gif", imgHurt: "p10-hurt.gif", imgKO: "p10-dead.gif" },
+            { id: 11, name: "Fairdealing's Finest", eliminationAudio: new Audio("FFsolongsucka.mp3"), imgIdle: "p11-idle.gif", imgPunchLeft: "p11-left-punch.gif", imgPunchRight: "p11-right-punch.gif", imgKick: "p11-kick.gif", imgHurt: "p11-hurt.gif", imgKO: "p11-dead.gif" },
+            { id: 12, name: "Crisco Cops", eliminationAudio: new Audio("CCnicetry.mp3"), imgIdle: "p12-idle.gif", imgPunchLeft: "p12-left-punch.gif", imgPunchRight: "p12-right-punch.gif", imgKick: "p12-kick.gif", imgHurt: "p12-hurt.gif", imgKO: "p12-dead.gif" },
         ];
 
         const punchAudios = [
@@ -289,6 +289,8 @@
         const startBtn = document.getElementById('startButton');
         const bgMusic = document.getElementById('bg-music');
         const koSound = document.getElementById('ko-sound');
+        const winnerAnnounce = document.getElementById('winner-announcement');
+        const trophySound = document.getElementById('trophy-sound');
         const hud = document.getElementById('hud');
         const fightersContainer = document.getElementById('fighters-container');
         const announcer = document.getElementById('announcer-text');
@@ -317,9 +319,27 @@
             nextRoundQueue = [];
         }
 
+        // UNLOCK ALL AUDIO INSTANCES ON DIRECT USER GESTURE (MOBILE FIX)
         startBtn.addEventListener('click', () => {
             startBtn.parentElement.classList.add('hidden');
-            bgMusic.play().catch(e=>{});
+            
+            const allAudios = [
+                bgMusic, koSound, winnerAnnounce, trophySound,
+                ...punchAudios,
+                ...TEAMS.map(t => t.eliminationAudio)
+            ];
+
+            allAudios.forEach(audio => {
+                if (audio) {
+                    audio.play().then(() => {
+                        if (audio !== bgMusic) {
+                            audio.pause();
+                            audio.currentTime = 0;
+                        }
+                    }).catch(e => {});
+                }
+            });
+
             generateBracket(); nextMatch();
         });
 
@@ -484,9 +504,10 @@
             loserImg.src = loserData.imgKO;
 
             flashAnnouncer("K.O.", 2500, () => {
-                if (loser.eliminationSound) {
-                    let audio = new Audio(loser.eliminationSound);
-                    audio.volume = 0.9; audio.play().catch(e=>{});
+                if (loser.eliminationAudio) {
+                    loser.eliminationAudio.currentTime = 0;
+                    loser.eliminationAudio.volume = 0.9;
+                    loser.eliminationAudio.play().catch(e=>{});
                 }
                 nextRoundQueue.push(winner); assignPick(loser);
                 hud.classList.add('hidden'); fightersContainer.classList.add('hidden');
@@ -506,8 +527,8 @@
 
         function declareChampion(winner) {
             assignPick(winner); 
-            document.getElementById('winner-announcement').play().catch(e=>{});
-            document.getElementById('trophy-sound').play().catch(e=>{});
+            winnerAnnounce.currentTime = 0; winnerAnnounce.play().catch(e=>{});
+            trophySound.currentTime = 0; trophySound.play().catch(e=>{});
             
             flashAnnouncer("CHAMPION!", 3000, () => {
                 document.getElementById('stage').innerHTML = `
