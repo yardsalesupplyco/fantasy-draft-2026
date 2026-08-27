@@ -125,8 +125,8 @@
         }
         .pick-card {
             display: inline-block; background-color: #222; border: 1px solid #444;
-            border-radius: 0.5rem; padding: 0.5rem 1rem; margin: 0 0.5rem;
-            min-width: 150px; text-align: center; animation: slideInRight 0.5s ease-out;
+            border-radius: 0.5rem; padding: 0.5rem 1.25rem; margin: 0 0.5rem;
+            min-width: 170px; text-align: center; animation: slideInRight 0.5s ease-out;
         }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
 
@@ -252,7 +252,7 @@
     </main>
 
     <footer id="ticker-container" class="w-full">
-        <div id="ticker" class="w-full h-16 sm:h-20 flex items-center"></div>
+        <div id="ticker" class="w-full h-16 md:h-24 flex items-center"></div>
     </footer>
     
     <!-- Audio Elements -->
@@ -330,7 +330,6 @@
             nextRoundQueue = [];
         }
 
-        // SILENT AUDIO PRIMING FOR MOBILE
         startBtn.addEventListener('click', () => {
             startBtn.parentElement.classList.add('hidden');
             
@@ -342,12 +341,12 @@
 
             allAudios.forEach(audio => {
                 if (audio) {
-                    audio.muted = true; // Mute while unlocking
+                    audio.muted = true;
                     audio.play().then(() => {
                         if (audio !== bgMusic) {
                             audio.pause();
                             audio.currentTime = 0;
-                            audio.muted = false; // Restore sound for later playback
+                            audio.muted = false;
                         } else {
                             audio.muted = false;
                         }
@@ -536,7 +535,7 @@
 
         function assignPick(team) {
             const pickCard = document.createElement('div'); pickCard.className = 'pick-card';
-            pickCard.innerHTML = `<div class="font-bebas text-xl sm:text-2xl text-amber-400">PICK ${currentPickNumber}</div><div class="font-bold text-xs sm:text-sm truncate">${team.name}</div>`;
+            pickCard.innerHTML = `<div class="font-bebas text-xl md:text-3xl text-amber-400">PICK ${currentPickNumber}</div><div class="font-bold text-xs md:text-base truncate">${team.name}</div>`;
             ticker.insertBefore(pickCard, ticker.firstChild); currentPickNumber--;
         }
 
