@@ -13,12 +13,13 @@
         }
         .font-bebas { font-family: 'Bebas Neue', cursive; }
 
-        header { flex-shrink: 0; }
+        header { flex-shrink: 0; padding: 0.5rem; }
 
         #stage {
-            position: relative; width: 100%; max-width: 1400px; height: 620px;
-            background-color: #1a1a1a; border: 8px solid #333; border-radius: 1rem;
-            margin: auto; overflow: hidden; box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+            position: relative; width: 98%; max-width: 1800px; height: 68vh;
+            min-height: 480px; max-height: 850px;
+            background-color: #1a1a1a; border: 10px solid #333; border-radius: 1rem;
+            margin: auto; overflow: hidden; box-shadow: inset 0 0 120px rgba(0,0,0,0.85);
         }
 
         .video-bg {
@@ -28,21 +29,22 @@
         }
 
         #hud {
-            position: absolute; top: 0; left: 0; width: 100%; padding: 20px 40px;
+            position: absolute; top: 0; left: 0; width: 100%; padding: 25px 50px;
             display: flex; justify-content: space-between; align-items: center;
             z-index: 50; box-sizing: border-box;
         }
 
-        .player-hud { width: 40%; }
+        .player-hud { width: 42%; }
         .player-name {
-            font-family: 'Bebas Neue', cursive; font-size: 2.5rem;
-            text-transform: uppercase; text-shadow: 2px 2px 4px #000; margin-bottom: 5px;
+            font-family: 'Bebas Neue', cursive; font-size: 3.75rem;
+            text-transform: uppercase; text-shadow: 3px 3px 6px #000; margin-bottom: 6px;
+            letter-spacing: 0.05em;
         }
         .p2-hud .player-name { text-align: right; }
 
         .health-bar-container {
-            width: 100%; height: 35px; background-color: #333; border: 3px solid #ddd;
-            border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.8);
+            width: 100%; height: 48px; background-color: #222; border: 4px solid #eee;
+            border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.9);
         }
 
         .health-bar {
@@ -52,49 +54,50 @@
         .p2-hud .health-bar { float: right; }
 
         #vs-badge {
-            font-family: 'Bebas Neue', cursive; font-size: 4rem; color: #FBBF24;
-            text-shadow: 0 0 20px #ff0000, 2px 2px 0px #000; animation: pulse 1s infinite alternate;
+            font-family: 'Bebas Neue', cursive; font-size: 5.5rem; color: #FBBF24;
+            text-shadow: 0 0 25px #ff0000, 3px 3px 0px #000; animation: pulse 1s infinite alternate;
         }
 
         #announcer-text {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
-            font-family: 'Bebas Neue', cursive; font-size: 8rem; color: #FBBF24;
-            text-shadow: 6px 6px 0px #b91c1c, 0 0 40px rgba(0,0,0,0.8); z-index: 60; opacity: 0;
+            font-family: 'Bebas Neue', cursive; font-size: 11rem; color: #FBBF24;
+            text-shadow: 8px 8px 0px #b91c1c, 0 0 50px rgba(0,0,0,0.9); z-index: 60; opacity: 0;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
         }
         .show-announce { transform: translate(-50%, -50%) scale(1) !important; opacity: 1 !important; }
 
         .fighter {
-            position: absolute; bottom: 35px; width: 300px; display: flex;
+            position: absolute; bottom: 20px; width: 380px; display: flex;
             flex-direction: column; align-items: center; z-index: 20; transition: transform 0.1s ease-out;
         }
 
-        #fighter-1 { left: 28%; }
-        #fighter-2 { right: 28%; } 
+        #fighter-1 { left: 26%; }
+        #fighter-2 { right: 26%; } 
         #fighter-2 .fighter-image { transform: scaleX(-1); } 
 
         .fighter-image {
-            width: 100%; height: auto; max-height: 420px; object-fit: contain;
-            filter: drop-shadow(0px 15px 12px rgba(0,0,0,0.8));
+            width: 100%; height: auto; max-height: 520px; object-fit: contain;
+            filter: drop-shadow(0px 20px 15px rgba(0,0,0,0.85));
             transition: filter 0.1s, transform 0.1s;
             image-rendering: pixelated; 
         }
 
         .fighter-name-tag {
-            display: inline-block; background-color: rgba(0, 0, 0, 0.85); color: #fff;
-            padding: 4px 12px; border-radius: 4px; font-weight: bold; margin-top: -15px; z-index: 21;
-            border: 1px solid rgba(251, 191, 36, 0.4);
+            display: inline-block; background-color: rgba(0, 0, 0, 0.9); color: #fff;
+            padding: 6px 18px; border-radius: 6px; font-weight: bold; font-size: 1.25rem;
+            margin-top: -20px; z-index: 21; border: 2px solid rgba(251, 191, 36, 0.6);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.8);
         }
 
-        .anim-attack { transform: translateX(110px) !important; }
-        .anim-attack-p2 { transform: translateX(-110px) !important; }
+        .anim-attack { transform: translateX(140px) !important; }
+        .anim-attack-p2 { transform: translateX(-140px) !important; }
         .anim-hit { 
-            filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(3) drop-shadow(0px 0px 20px red) !important;
-            transform: translateX(-25px);
+            filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(3) drop-shadow(0px 0px 25px red) !important;
+            transform: translateX(-35px);
         }
         .anim-hit-p2 {
-            filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(3) drop-shadow(0px 0px 20px red) !important;
-            transform: translateX(25px);
+            filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(3) drop-shadow(0px 0px 25px red) !important;
+            transform: translateX(35px);
         }
         
         .anim-ko {
@@ -110,7 +113,7 @@
         @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
 
         .particle {
-            position: absolute; font-size: 3rem; z-index: 40; pointer-events: none;
+            position: absolute; font-size: 4.5rem; z-index: 40; pointer-events: none;
             animation: popOut 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         @keyframes popOut {
@@ -120,15 +123,16 @@
 
         #ticker-container { flex-shrink: 0; }
         #ticker {
-            background-color: #111; border-top: 4px solid #FBBF24; overflow-x: auto;
-            white-space: nowrap; padding: 10px;
+            background-color: #111; border-top: 5px solid #FBBF24; overflow-x: auto;
+            white-space: nowrap; padding: 12px; height: 110px;
         }
         .pick-card {
-            display: inline-block; background-color: #222; border: 1px solid #444;
-            border-radius: 0.5rem; padding: 0.5rem 1.25rem; margin: 0 0.5rem;
-            min-width: 170px; text-align: center; animation: slideInRight 0.5s ease-out;
+            display: inline-block; background-color: #222; border: 2px solid #555;
+            border-radius: 0.75rem; padding: 0.75rem 1.75rem; margin: 0 0.75rem;
+            min-width: 220px; text-align: center; animation: slideInRight 0.5s ease-out;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
         }
-        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
 
         /* --- MOBILE RESPONSIVE OVERRIDES --- */
         @media (max-width: 768px) {
@@ -173,6 +177,7 @@
                 font-size: 0.6rem;
                 padding: 1px 4px;
                 margin-top: -6px;
+                border-width: 1px;
             }
 
             .anim-attack { transform: translateX(35px) !important; }
@@ -198,26 +203,28 @@
 
             #ticker {
                 padding: 6px;
+                height: 65px;
             }
 
             .pick-card {
                 min-width: 100px;
                 padding: 0.2rem 0.4rem;
                 margin: 0 0.25rem;
+                border-width: 1px;
             }
         }
     </style>
 </head>
 <body>
 
-    <header class="text-center p-2">
-        <h1 class="font-bebas text-5xl text-amber-400 tracking-wider">Fantasy Draft Kombat</h1>
-        <p class="text-gray-400 text-sm">12 Teams. 11 Matches. 1 Champion.</p>
+    <header class="text-center">
+        <h1 class="font-bebas text-6xl md:text-7xl text-amber-400 tracking-wider">Fantasy Draft Kombat</h1>
+        <p class="text-gray-400 text-base md:text-lg">12 Teams. 11 Matches. 1 Champion.</p>
     </header>
 
     <main class="flex-grow flex flex-col items-center justify-center p-2 min-h-0 overflow-hidden">
         <div id="controls" class="text-center mb-4 z-50 absolute">
-            <button id="startButton" class="font-bebas bg-amber-400 text-gray-900 text-4xl px-12 py-4 rounded-lg shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:bg-amber-300 hover:scale-105 transition-all">
+            <button id="startButton" class="font-bebas bg-amber-400 text-gray-900 text-5xl md:text-6xl px-16 py-6 rounded-xl shadow-[0_0_30px_rgba(251,191,36,0.8)] hover:bg-amber-300 hover:scale-105 transition-all cursor-pointer">
                 BEGIN TOURNAMENT
             </button>
         </div>
@@ -252,7 +259,7 @@
     </main>
 
     <footer id="ticker-container" class="w-full">
-        <div id="ticker" class="w-full h-16 md:h-24 flex items-center"></div>
+        <div id="ticker" class="w-full flex items-center"></div>
     </footer>
     
     <!-- Audio Elements -->
@@ -330,6 +337,7 @@
             nextRoundQueue = [];
         }
 
+        // SILENT AUDIO PRIMING FOR MOBILE
         startBtn.addEventListener('click', () => {
             startBtn.parentElement.classList.add('hidden');
             
@@ -535,7 +543,7 @@
 
         function assignPick(team) {
             const pickCard = document.createElement('div'); pickCard.className = 'pick-card';
-            pickCard.innerHTML = `<div class="font-bebas text-xl md:text-3xl text-amber-400">PICK ${currentPickNumber}</div><div class="font-bold text-xs md:text-base truncate">${team.name}</div>`;
+            pickCard.innerHTML = `<div class="font-bebas text-2xl md:text-4xl text-amber-400">PICK ${currentPickNumber}</div><div class="font-bold text-sm md:text-lg truncate">${team.name}</div>`;
             ticker.insertBefore(pickCard, ticker.firstChild); currentPickNumber--;
         }
 
@@ -547,10 +555,10 @@
             flashAnnouncer("CHAMPION!", 3000, () => {
                 document.getElementById('stage').innerHTML = `
                     <img class="video-bg" src="background.gif" alt="Fighting Stage">
-                    <div style="position:absolute; z-index:100; text-align:center; width:100%; top:20%;">
-                        <img src="trophy.svg" alt="Trophy" style="height:180px; margin: 0 auto; filter: drop-shadow(0 0 30px #FBBF24);" onerror="this.onerror=null;this.src='https://placehold.co/180x180?text=🏆';">
-                        <div class="font-bebas text-amber-400 text-3xl sm:text-6xl" style="text-shadow: 3px 3px 0 #000;">${winner.name}</div>
-                        <div class="font-bebas text-white text-xl sm:text-4xl" style="text-shadow: 2px 2px 0 #000;">CLAIMS THE #1 PICK</div>
+                    <div style="position:absolute; z-index:100; text-align:center; width:100%; top:15%;">
+                        <img src="trophy.svg" alt="Trophy" style="height:220px; margin: 0 auto; filter: drop-shadow(0 0 30px #FBBF24);" onerror="this.onerror=null;this.src='https://placehold.co/220x220?text=🏆';">
+                        <div class="font-bebas text-amber-400 text-4xl md:text-7xl" style="text-shadow: 4px 4px 0 #000;">${winner.name}</div>
+                        <div class="font-bebas text-white text-2xl md:text-5xl" style="text-shadow: 2px 2px 0 #000;">CLAIMS THE #1 PICK</div>
                     </div>`;
             });
         }
